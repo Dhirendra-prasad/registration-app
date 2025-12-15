@@ -1,0 +1,5 @@
+mysql -h mainline.proxy.rlwy.net -u root -p oIoVFqLxJRUmOVyvlwGoXezAaxDuLNFr --port 55600 --protocol=TCP railway
+
+git push origin main(Push to Dhirendra GitHub)
+
+git push neworigin main(Push to Drinkit GitHub)
