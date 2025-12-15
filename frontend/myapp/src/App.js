@@ -3,7 +3,8 @@ import "./App.css"; // make sure this line is here
 
 // Change this if your backend runs on a different URL/port or use env on Vercel
 const BACKEND_URL =
-  process.env.REACT_APP_API_URL || "http://localhost:4242";
+  process.env.REACT_APP_API_URL ||
+  "https://weeding-backend-979o.onrender.com";
 
 // Simple reusable spinner
 function Spinner({ size = "md" }) {
