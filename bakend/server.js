@@ -1,22 +1,43 @@
+// Load environment variables FIRST
 require("dotenv").config();
+
+// Imports
 const express = require("express");
+const mongoose = require("mongoose");
 const cors = require("cors");
-const axios = require("axios");
-const mysql = require("mysql2/promise");
 
+// App initialization
 const app = express();
-const PORT = process.env.PORT || 4242;
 
-// ===== 1. MySQL pool =====
-const pool = mysql.createPool({
-  host: process.env.MYSQL_HOST || "localhost",
-  user: process.env.MYSQL_USER || "root",
-  password: process.env.MYSQL_PASSWORD || "",
-  database: process.env.MYSQL_DATABASE || "registration_app",
-  waitForConnections: true,
-  connectionLimit: 10,
-  queueLimit: 0,
+// Middleware
+app.use(cors());
+app.use(express.json());
+
+// Environment variables
+const PORT = process.env.PORT || 4242;
+const MONGO_URI = process.env.MONGODB_URI;
+
+console.log("MONGO URI =", MONGO_URI);
+
+// MongoDB connection
+mongoose
+  .connect(MONGO_URI)
+  .then(() => console.log("✅ MongoDB Connected"))
+  .catch((err) => console.error("❌ MongoDB Error:", err));
+
+// Test route
+app.get("/", (req, res) => {
+  res.send("Backend is running");
 });
+
+// Start server (MUST be last)
+app.listen(PORT, () => {
+  console.log(`🚀 Server listening on http://localhost:${PORT}`);
+});
+
+
+
+
 
 // Helper DB functions
 async function createRegistration({ name, email, age, qualification }) {
