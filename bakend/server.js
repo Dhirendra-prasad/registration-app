@@ -10,7 +10,29 @@ const cors = require("cors");
 const app = express();
 
 // Middleware
-app.use(cors());
+// app.use(cors());
+
+app.use(
+  cors({
+    origin: function (origin, callback) {
+      const allowedOrigins = [
+        "http://localhost:3000",
+        "https://dhirendra-prasad.github.io",
+        "https://drinkit247.github.io"
+      ];
+
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
+    credentials: true,
+  })
+);
+
+
+
 app.use(express.json());
 
 // Environment variables
