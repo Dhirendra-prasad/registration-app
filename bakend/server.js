@@ -857,12 +857,12 @@ app.get("/api/admin/registrations", async (req, res) => {
 /***********************
  * 11. START SERVER
  ***********************/
-// app.listen(PORT, () => {
-//   console.log(`🚀 Server running on port ${PORT}`);
-// });
-
-
-app.listen(PORT, "0.0.0.0", () => {
+app.listen(PORT, () => {
   console.log(`🚀 Server running on port ${PORT}`);
 });
+
+
+// app.listen(PORT, "0.0.0.0", () => {
+//   console.log(`🚀 Server running on port ${PORT}`);
+// });
 
