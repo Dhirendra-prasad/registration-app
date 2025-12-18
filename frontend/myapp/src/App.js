@@ -6,6 +6,8 @@ const BACKEND_URL =
   process.env.REACT_APP_API_URL ||
   "https://weeding-backend-979o.onrender.com";
 
+// const BACKEND_URL = "http://localhost:4242";
+
 // Simple reusable spinner
 function Spinner({ size = "md" }) {
   const cls = size === "sm" ? "spinner spinner-sm" : "spinner";

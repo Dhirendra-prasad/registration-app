@@ -1,5 +1,33 @@
-mysql -h mainline.proxy.rlwy.net -u root -p oIoVFqLxJRUmOVyvlwGoXezAaxDuLNFr --port 55600 --protocol=TCP railway
+(Railway MySQL credential)
+Hostname - mainline.proxy.rlwy.net 
+Username - root 
+Password - oIoVFqLxJRUmOVyvlwGoXezAaxDuLNFr 
+Port - 55600 
+Protocol - TCP railway
+
 
 git push origin main(Push to Dhirendra GitHub)
 
+
 git push neworigin main(Push to Drinkit GitHub)
+
+git status
+git add .
+
+ssh-add ~/.ssh/id_github_dhirendra
+
+
+mongodb
+username - imdhirendra22_db_user
+password - y0p5yfM4xu9LHodL
+mongodb+srv://wedding_admin:<y0p5yfM4xu9LHodL>@wedding-cluster.xxxxx.mongodb.net/Registration_DB
+wedding_admin
+Dhirendra
+
+mongodb+srv://<db_username>:<db_password>@cluster0.oye1vlv.mongodb.net/?appName=Cluster0
+MONGODB_URI=mongodb+srv://wedding_admin:ACTUAL_PASSWORD@wedding-cluster.xxxxx.mongodb.net/weddingDB
+PORT=4242
+
+https://weeding-backend-979o.onrender.com
+https://dhirendra-prasad.github.io/registration-app
+

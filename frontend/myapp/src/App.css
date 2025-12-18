@@ -679,3 +679,114 @@ input:focus {
 .gap-2 {
   gap: 0.5rem;
 }
+
+
+/* =====================================
+   MOBILE RESPONSIVENESS FIX (CRITICAL)
+===================================== */
+
+/* Prevent horizontal scroll */
+html, body {
+  overflow-x: hidden;
+}
+
+/* ---------- BACKGROUND FIX ---------- */
+/* Mobile browsers struggle with fixed backgrounds */
+@media (max-width: 768px) {
+  .wedding-bg {
+    background-attachment: scroll;
+  }
+
+  .wedding-bg::before,
+  .wedding-bg::after {
+    position: absolute;
+  }
+}
+
+/* ---------- CONTAINER & CARD ---------- */
+@media (max-width: 640px) {
+  .min-h-screen {
+    padding: 0.75rem !important;
+  }
+
+  .glass-card {
+    padding: 1rem !important;
+    border-radius: 1rem;
+  }
+}
+
+/* ---------- NAVBAR FIX ---------- */
+@media (max-width: 768px) {
+  .app-navbar {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.75rem;
+    text-align: center;
+  }
+
+  .app-navbar > div {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .nav-btn {
+    width: 100%;
+    text-align: center;
+  }
+}
+
+/* ---------- FORM GRID FIX ---------- */
+@media (max-width: 640px) {
+  .grid-cols-2 {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ---------- BUTTON GROUPS ---------- */
+@media (max-width: 640px) {
+  .flex.items-center.gap-3 {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  button {
+    width: 100%;
+  }
+}
+
+/* ---------- ADMIN LAYOUT FIX ---------- */
+@media (max-width: 768px) {
+  .admin-layout {
+    flex-direction: column;
+  }
+
+  .admin-sidebar {
+    width: 100%;
+  }
+
+  .admin-main {
+    width: 100%;
+  }
+}
+
+/* ---------- ADMIN TABLE ---------- */
+@media (max-width: 768px) {
+  .admin-main {
+    overflow-x: auto;
+  }
+
+  table {
+    min-width: 720px;
+  }
+}
+
+/* ---------- TEXT SCALING ---------- */
+@media (max-width: 640px) {
+  .text-2xl {
+    font-size: 1.25rem;
+  }
+
+  .text-xl {
+    font-size: 1.1rem;
+  }
+}
