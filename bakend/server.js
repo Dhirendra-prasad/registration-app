@@ -603,18 +603,38 @@ app.post("/debug/body", (req, res) => {
 });
 
 
+// app.use(
+//   cors({
+//     origin: process.env.CORS_ORIGIN
+//       ? process.env.CORS_ORIGIN.split(",")
+//       : [
+//           "http://localhost:3000",
+//           "https://dhirendra-prasad.github.io",
+//           "https://drinkit247.github.io",
+//         ],
+//     credentials: true,
+//   })
+// );
+
+
+
+
 app.use(
   cors({
-    origin: process.env.CORS_ORIGIN
-      ? process.env.CORS_ORIGIN.split(",")
-      : [
-          "http://localhost:3000",
-          "https://dhirendra-prasad.github.io",
-          "https://drinkit247.github.io",
-        ],
+    origin: [
+      "http://localhost:3000",
+      "https://dhirendra-prasad.github.io",
+      "https://drinkit247.github.io",
+    ],
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"],
     credentials: true,
   })
 );
+
+
+
+
 
 /***********************
  * 4. MODELS
@@ -837,6 +857,12 @@ app.get("/api/admin/registrations", async (req, res) => {
 /***********************
  * 11. START SERVER
  ***********************/
-app.listen(PORT, () => {
+// app.listen(PORT, () => {
+//   console.log(`🚀 Server running on port ${PORT}`);
+// });
+
+
+app.listen(PORT, "0.0.0.0", () => {
   console.log(`🚀 Server running on port ${PORT}`);
 });
+
