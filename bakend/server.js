@@ -603,34 +603,36 @@ app.post("/debug/body", (req, res) => {
 });
 
 
+app.use(
+  cors({
+    origin: process.env.CORS_ORIGIN
+      ? process.env.CORS_ORIGIN.split(",")
+      : [
+          "http://localhost:3000",
+          "https://dhirendra-prasad.github.io",
+          "https://drinkit247.github.io",
+        ],
+    credentials: true,
+  })
+);
+
+app.options("*", cors());
+
+
+
+
 // app.use(
 //   cors({
-//     origin: process.env.CORS_ORIGIN
-//       ? process.env.CORS_ORIGIN.split(",")
-//       : [
-//           "http://localhost:3000",
-//           "https://dhirendra-prasad.github.io",
-//           "https://drinkit247.github.io",
-//         ],
+//     origin: [
+//       "http://localhost:3000",
+//       "https://dhirendra-prasad.github.io",
+//       "https://drinkit247.github.io",
+//     ],
+//     // methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+//     // allowedHeaders: ["Content-Type", "Authorization"],
 //     credentials: true,
 //   })
 // );
-
-
-
-
-app.use(
-  cors({
-    origin: [
-      "http://localhost:3000",
-      "https://dhirendra-prasad.github.io",
-      "https://drinkit247.github.io",
-    ],
-    // methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-    // allowedHeaders: ["Content-Type", "Authorization"],
-    // credentials: true,
-  })
-);
 
 
 
