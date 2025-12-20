@@ -1,16 +1,16 @@
 {
   "files": {
     "main.css": "/registration-app/static/css/main.502bf880.css",
-    "main.js": "/registration-app/static/js/main.c799ebd6.js",
+    "main.js": "/registration-app/static/js/main.3425716f.js",
     "static/js/453.9799b89c.chunk.js": "/registration-app/static/js/453.9799b89c.chunk.js",
     "static/media/wedding-bg.jpg": "/registration-app/static/media/wedding-bg.4f46cced3af430e9ee5b.jpg",
     "index.html": "/registration-app/index.html",
     "main.502bf880.css.map": "/registration-app/static/css/main.502bf880.css.map",
-    "main.c799ebd6.js.map": "/registration-app/static/js/main.c799ebd6.js.map",
+    "main.3425716f.js.map": "/registration-app/static/js/main.3425716f.js.map",
     "453.9799b89c.chunk.js.map": "/registration-app/static/js/453.9799b89c.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.502bf880.css",
-    "static/js/main.c799ebd6.js"
+    "static/js/main.3425716f.js"
   ]
 }
