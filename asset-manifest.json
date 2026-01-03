@@ -1,16 +1,16 @@
 {
   "files": {
-    "main.css": "/registration-app/static/css/main.502bf880.css",
-    "main.js": "/registration-app/static/js/main.3425716f.js",
+    "main.css": "/registration-app/static/css/main.8f837890.css",
+    "main.js": "/registration-app/static/js/main.63d0f460.js",
     "static/js/453.9799b89c.chunk.js": "/registration-app/static/js/453.9799b89c.chunk.js",
-    "static/media/wedding-bg.jpg": "/registration-app/static/media/wedding-bg.4f46cced3af430e9ee5b.jpg",
+    "static/media/wedding-bg.jpg": "/registration-app/static/media/wedding-bg.638c839cb905358eebdc.jpg",
     "index.html": "/registration-app/index.html",
-    "main.502bf880.css.map": "/registration-app/static/css/main.502bf880.css.map",
-    "main.3425716f.js.map": "/registration-app/static/js/main.3425716f.js.map",
+    "main.8f837890.css.map": "/registration-app/static/css/main.8f837890.css.map",
+    "main.63d0f460.js.map": "/registration-app/static/js/main.63d0f460.js.map",
     "453.9799b89c.chunk.js.map": "/registration-app/static/js/453.9799b89c.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.502bf880.css",
-    "static/js/main.3425716f.js"
+    "static/css/main.8f837890.css",
+    "static/js/main.63d0f460.js"
   ]
 }
