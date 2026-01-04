@@ -2,11 +2,14 @@ import React, { useState, useEffect } from "react";
 import "./App.css"; // make sure this line is here
 
 // Change this if your backend runs on a different URL/port or use env on Vercel
-const BACKEND_URL =
-  process.env.REACT_APP_API_URL ||
-  "https://weeding-backend-979o.onrender.com";
+// const BACKEND_URL =
+//   process.env.REACT_APP_API_URL ||
+//   "https://weeding-backend-979o.onrender.com";
 
 // const BACKEND_URL = "http://localhost:4242";
+
+const BACKEND_URL = "https://weeding-backend-979o.onrender.com";
+
 
 // Simple reusable spinner
 function Spinner({ size = "md" }) {
@@ -27,16 +30,50 @@ export default function App() {
   });
 
 
+
   // App flow
   const [step, setStep] = useState("landing"); // landing, auth, form, payment, success, admin
+  const [otp, setOtp] = useState("");
 
-  // Registration form
+
+  // Previously abhove code was working but now modified so abhove is commented(due to req change)
+
   const [form, setForm] = useState({
+    // PERSONAL DETAILS
     name: "",
-    email: "",
+    gender: "",
     age: "",
+    religion: "",
+    caste: "",
+    height: "",
+    gotra: "",
+    birthPlaceTime: "",
+    complexion: "",
+    
+    // PROFESSIONAL PROFILE
+    professionalProfile: "",
+    
+    // PATERNAL FAMILY
+    grandfatherName: "",
+    fatherName: "",
+    motherName: "",
+    
+    // MATERNAL FAMILY
+    maternalFamily: "",
+    
+    // CONTACT DETAILS
+    mobile: "",
+    email: "",
+    address: "",
+    
+    // EXISTING
     qualification: "",
+    profession: "",
   });
+
+
+
+
 
   const [errors, setErrors] = useState({});
   const [submitting, setSubmitting] = useState(false);
@@ -51,6 +88,12 @@ export default function App() {
   const [adminLoading, setAdminLoading] = useState(false);
   const [adminError, setAdminError] = useState("");
   const [registrations, setRegistrations] = useState([]);
+  const [openProfileId, setOpenProfileId] = useState(null);
+  const [adminView, setAdminView] = useState("list"); // "list" | "profile"
+  const [selectedRegistration, setSelectedRegistration] = useState(null);
+  const [adminScrollY, setAdminScrollY] = useState(0);
+
+
 
   // Derived admin stats
   const totalRegistrations = registrations.length;
@@ -76,11 +119,6 @@ export default function App() {
     setAuthForm((prev) => ({ ...prev, [name]: value }));
   }
 
-  // function openForm() {
-  //   setStep("form");
-  // }
-
-
   async function openForm() {
     if (!currentUser) {
       setStep("auth");
@@ -95,12 +133,17 @@ export default function App() {
       if (resp.ok) {
         const data = await resp.json();
         const reg = data.registration;
+
+        // abhov commented ddue to req change
         setForm({
-          name: reg.name || "",
-          email: reg.email || "",
+          ...form,
+          ...reg,
           age: String(reg.age || ""),
-          qualification: reg.qualification || "",
         });
+
+
+
+
       } else {
         // No registration found, keep empty form
         setForm({
@@ -126,64 +169,75 @@ export default function App() {
     setForm((prev) => ({ ...prev, [name]: value }));
   }
 
+
+  //abhove commented dur to req change
   function validate() {
     const err = {};
+
     if (!form.name.trim()) err.name = "Name is required";
+    if (!form.gender) err.gender = "Gender is required";
     if (!form.email.trim()) err.email = "Email is required";
-    if (form.email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email)) {
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email)) {
       err.email = "Invalid email";
     }
-    if (!form.age.trim()) err.age = "Age is required";
-    if (form.age && (!/^[0-9]+$/.test(form.age) || Number(form.age) <= 0)) {
-      err.age = "Enter a valid age";
+
+    if (!form.mobile.trim()) err.mobile = "Mobile number is required";
+
+    if (!form.age.trim() || Number(form.age) <= 0) {
+      err.age = "Valid age is required";
     }
-    if (!form.qualification.trim()) {
-      err.qualification = "Qualification is required";
-    }
+
     return err;
   }
 
-  async function submitForm(e) {
-    e.preventDefault();
-    const v = validate();
-    setErrors(v);
-    if (Object.keys(v).length > 0) return;
+    async function submitForm(e) {
+      e.preventDefault();
 
-    setSubmitting(true);
-
-    try {
-      const response = await fetch(`${BACKEND_URL}/api/registrations`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          ...form,
-          userId: currentUser?.id,
-        }),
-
-      });
-
-      if (!response.ok) {
-        console.error("Failed to save registration", response.status);
-        alert("Failed to save registration. Please try again.");
+      const v = validate();
+      if (Object.keys(v).length > 0) {
+        alert("Age should be greater then zero");
         return;
       }
 
-      const data = await response.json();
+      setSubmitting(true);
 
-      setRegistrationId(data.registration.id);
-      setAmountCents(data.amount_cents);
-      setCurrency(data.currency || "INR");
+      try {
+        const response = await fetch(`${BACKEND_URL}/api/registrations`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            ...form,
+            age: form.age ? Number(form.age) : undefined,
+            userId: currentUser?.id,
+          }),
+        });
 
-      setStep("payment");
-    } catch (err) {
-      console.error("Error calling backend:", err);
-      alert("Error connecting to server. Is backend running?");
-    } finally {
-      setSubmitting(false);
+        if (!response.ok) {
+          alert("Failed to save registration");
+          return;
+        }
+
+        const data = await response.json();
+
+        setRegistrationId(data.registration._id);
+        setAmountCents(data.amount_cents);
+        setCurrency(data.currency || "INR");
+
+        // ✅ CORRECT MERGE
+        setForm(prev => ({
+          ...prev,
+          ...data.registration,
+        }));
+
+        setStep("payment");
+      } catch (err) {
+        alert("Server error");
+      } finally {
+        setSubmitting(false);
+      }
     }
-  }
+
+
 
   async function handleMockPayment() {
     setPaymentStatus("processing");
@@ -260,25 +314,13 @@ export default function App() {
     }
   }
 
-  // async function handleSignup(e) {
-  //   e.preventDefault();
-  //   setAuthError("");
-
-  //   try {
-  //     const resp = await fetch(`${BACKEND_URL}/api/auth/register`, {
-  //       method: "POST",
-  //       headers: { "Content-Type": "application/json" },
-  //       body: JSON.stringify({
-  //         name: authForm.name,
-  //         email: authForm.email,
-  //         password: authForm.password,
-  //       }),
-  //     });
-
 
   async function handleSignup(e) {
-    e.preventDefault();
-    setAuthError("");
+
+    alert("OTP has been sent to your email. Please verify.");
+    setStep("verify-otp");
+
+
 
     // 🔒 Frontend validation for password match
     if (!authForm.password || !authForm.confirmPassword) {
@@ -310,9 +352,8 @@ export default function App() {
         return;
       }
 
-      setCurrentUser(data.user);
-      localStorage.setItem("currentUser", JSON.stringify(data.user));
-      setStep("landing");
+      setStep("verify-otp");
+
     } catch (err) {
       console.error("Signup error", err);
       setAuthError("Error connecting to server");
@@ -398,11 +439,15 @@ export default function App() {
                 </button>
               </>
             ) : (
-              <button
-                onClick={() => setStep("auth")}
-                className="nav-btn nav-btn-primary"
-              >
-                Login / Signup
+
+                <button
+                  className="nav-btn nav-btn-primary"
+                  onClick={() => {
+                    if (step === "verify-otp") return;
+                    setStep("auth");
+                  }}
+                >
+                Home
               </button>
             )}
           </div>
@@ -516,32 +561,90 @@ export default function App() {
             </div>
           )}
 
+          {/* OTP VERIFICATION */}
+          {step === "verify-otp" && (
+            <div className="max-w-md">
+              <h2 className="text-xl font-medium mb-4">
+                Verify Your Email
+              </h2>
+
+              {authError && (
+                <div className="mb-3 text-sm text-red-600">
+                  {authError}
+                </div>
+              )}
+
+              <div>
+                <label className="block text-sm font-medium">
+                  Enter 6-digit OTP sent to your email
+                </label>
+                <input
+                  value={otp}
+                  onChange={(e) => setOtp(e.target.value)}
+                  className="mt-1 w-full border rounded px-3 py-2"
+                  placeholder="Enter OTP"
+                  maxLength={6}
+                />
+              </div>
+            <button
+              onClick={async () => {
+                setAuthError("");
+
+                if (!otp || otp.length !== 6) {
+                  setAuthError("Please enter a valid 6-digit OTP");
+                  return;
+                }
+
+                try {
+                  const resp = await fetch(`${BACKEND_URL}/api/auth/verify-otp`, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({
+                      email: authForm.email,
+                      otp,
+                    }),
+                  });
+
+                  const data = await resp.json();
+
+                  if (!resp.ok) {
+                    setAuthError(data.error || "Invalid OTP");
+                    return;
+                  }
+
+                  // ✅ LOGIN USER AFTER OTP
+                  setCurrentUser(data.user);
+                  localStorage.setItem("currentUser", JSON.stringify(data.user));
+
+                  // ✅ MOVE TO LANDING
+                  setStep("landing");
+                } catch (err) {
+                  setAuthError("OTP verification failed");
+                }
+              }}
+              className="mt-4 px-5 py-2 bg-indigo-600 text-white rounded-lg"
+            >
+              Verify OTP
+            </button>
+
+            </div>
+          )}
+
+
           {/* LANDING */}
           {step === "landing" && (
             <div>
               {!currentUser ? (
                 <p className="text-gray-600 mb-6">
-                  Please{" "}
+                  Please click hear to register.{" "}
                   <button
                     className="text-indigo-600 underline"
+                    // className="nav-btn nav-btn-primary"
                     onClick={() => setStep("auth")}
-                  >
+                    >
                     login or sign up
-                  </button>{" "}
-                  to register.
+                  </button>
                 </p>
-                  // <div className="glass-card login-glass-card p-6 mb-6 text-center">
-                  //   <p className="text-white text-lg font-medium">
-                  //     Please{" "}
-                  //     <button
-                  //       className="px-6 py-2 rounded-full bg-gradient-to-r from-sky-400 to-blue-500 text-white font-semibold shadow-[0_4px_20px_rgba(56,178,255,0.45)] hover:shadow-[0_6px_26px_rgba(56,178,255,0.6)] transition-all duration-300"
-                  //       onClick={() => setStep('auth')}
-                  //     >
-                  //       Login / Sign Up
-                  //     </button>
-                  //     to register.
-                  //   </p>
-                  // </div>
 
               ) : (
                 <>
@@ -560,83 +663,161 @@ export default function App() {
           )}
 
           {/* REGISTRATION FORM */}
+
           {step === "form" && (
             <div>
-              <h2 className="text-xl font-medium mb-4">
-                Registration Form
-              </h2>
               <form onSubmit={submitForm} className="space-y-4">
-                <div>
-                  <label className="block text-sm font-medium">
-                    Full name
-                  </label>
-                  <input
-                    name="name"
-                    value={form.name}
+              <h3 className="form-section-title">Personal Details</h3>
+
+              <div className="grid grid-cols-2 gap-4">
+                <div className="form-field">
+                  <label className="form-label">Name</label>
+                  <input name="name" value={form.name} onChange={onChange} className="form-input" />
+                </div>
+                <div className="form-field">
+                  <label className="form-label">Gender</label>
+                  <select
+                    name="gender"
+                    value={form.gender}
                     onChange={onChange}
-                    className="mt-1 w-full border rounded px-3 py-2"
-                  />
-                  {errors.name && (
-                    <div className="text-red-500 text-sm mt-1">
-                      {errors.name}
-                    </div>
+                    className="form-input"
+                  >
+                    <option value="">Select Gender</option>
+                    <option value="Male">Male</option>
+                    <option value="Female">Female</option>
+                    <option value="Other">Other</option>
+                  </select>
+                  {errors.gender && (
+                  <div className="text-red-500 text-sm mt-1">
+                    {errors.gender}
+                  </div>
                   )}
                 </div>
 
-                <div>
-                  <label className="block text-sm font-medium">
-                    Email
-                  </label>
-                  <input
-                    name="email"
-                    value={form.email}
-                    onChange={onChange}
-                    className="mt-1 w-full border rounded px-3 py-2"
-                  />
-                  {errors.email && (
-                    <div className="text-red-500 text-sm mt-1">
-                      {errors.email}
-                    </div>
-                  )}
+                <div className="form-field">
+                  <label className="form-label">Age</label>
+                  <input name="age" value={form.age} onChange={onChange} className="form-input" />
+                </div>
+                <div className="form-field">
+                  <label className="form-label">Birth Place & Time</label>
+                  <input name="birthPlaceTime" value={form.birthPlaceTime} onChange={onChange} className="form-input" />
                 </div>
 
-                <div className="grid grid-cols-2 gap-4">
-                  <div>
-                    <label className="block text-sm font-medium">
-                      Age
-                    </label>
-                    <input
-                      name="age"
-                      value={form.age}
-                      onChange={onChange}
-                      className="mt-1 w-full border rounded px-3 py-2"
-                    />
-                    {errors.age && (
-                      <div className="text-red-500 text-sm mt-1">
-                        {errors.age}
-                      </div>
-                    )}
-                  </div>
 
-                  <div>
-                    <label className="block text-sm font-medium">
-                      Qualification
-                    </label>
-                    <input
-                      name="qualification"
-                      value={form.qualification}
-                      onChange={onChange}
-                      className="mt-1 w-full border rounded px-3 py-2"
-                    />
-                    {errors.qualification && (
-                      <div className="text-red-500 text-sm mt-1">
-                        {errors.qualification}
-                      </div>
-                    )}
-                  </div>
+                <div className="form-field">
+                  <label className="form-label">Complexion</label>
+                  <input name="complexion" value={form.complexion} onChange={onChange} className="form-input" />
                 </div>
 
-                <div className="flex items-center gap-3">
+                <div className="form-field">
+                  <label className="form-label">Gotra</label>
+                  <input name="gotra" value={form.gotra} onChange={onChange} className="form-input" />
+                </div>
+
+                <div className="form-field">
+                  <label className="form-label">Height</label>
+                  <input name="height" value={form.height} onChange={onChange} className="form-input" />
+                </div>
+
+                <div className="form-field">
+                  <label className="form-label">Caste</label>
+                  <input name="caste" value={form.caste} onChange={onChange} className="form-input" />
+                </div>
+
+                <div className="form-field">
+                  <label className="form-label">Religion</label>
+                  <input name="religion" value={form.religion} onChange={onChange} className="form-input" />
+                </div>
+              </div>
+
+
+              <h3 className="form-section-title">Professional Profile</h3>
+
+              <div className="form-field">
+                <label className="form-label">Professional Profile</label>
+                <textarea
+                  name="professionalProfile"
+                  value={form.professionalProfile}
+                  onChange={onChange}
+                  className="form-textarea"
+                  rows={4}
+                />
+              </div>
+
+
+
+              <h3 className="form-section-title">Paternal Family</h3>
+
+              <div className="grid grid-cols-2 gap-4">
+                <div className="form-field">
+                  <label className="form-label">Grandfather's Name</label>
+                  <input name="grandfatherName" value={form.grandfatherName} onChange={onChange} className="form-input" />
+                </div>
+
+                <div className="form-field">
+                  <label className="form-label">Father's Name</label>
+                  <input name="fatherName" value={form.fatherName} onChange={onChange} className="form-input" />
+                </div>
+
+                <div className="form-field">
+                  <label className="form-label">Mother's Name</label>
+                  <input name="motherName" value={form.motherName} onChange={onChange} className="form-input" />
+                </div>
+              </div>
+
+              <h3 className="form-section-title">Maternal Family</h3>
+
+              <div className="form-field">
+                <label className="form-label">Maternal Family Details</label>
+                <textarea
+                  name="maternalFamily"
+                  value={form.maternalFamily}
+                  onChange={onChange}
+                  className="form-textarea"
+                  rows={3}
+                />
+              </div>
+
+              <h3 className="form-section-title">Contact Details</h3>
+
+              <div className="grid grid-cols-2 gap-4">
+                <div className="form-field">
+                  <label className="form-label">Mobile No</label>
+                  <input name="mobile" value={form.mobile} onChange={onChange} className="form-input" />
+                </div>
+
+                <div className="form-field">
+                  <label className="form-label">Email</label>
+                  <input name="email" value={form.email} onChange={onChange} className="form-input" />
+                </div>
+              </div>
+
+              <div className="form-field">
+                <label className="form-label">Address</label>
+                <textarea
+                  name="address"
+                  value={form.address}
+                  onChange={onChange}
+                  className="form-textarea"
+                  rows={2}
+                />
+              </div>
+
+              <h3 className="form-section-title">Professional Details</h3>
+
+              <div className="grid grid-cols-2 gap-4">
+                <div className="form-field">
+                  <label className="form-label">Qualification</label>
+                  <input name="qualification" value={form.qualification} onChange={onChange} className="form-input" />
+                </div>
+
+                <div className="form-field">
+                  <label className="form-label">Profession</label>
+                  <input name="profession" value={form.profession} onChange={onChange} className="form-input" />
+                </div>
+              </div>
+
+              <div className="flex items-center gap-3">
                   <button
                     type="submit"
                     disabled={submitting}
@@ -725,32 +906,67 @@ export default function App() {
 
           {/* SUCCESS */}
           {step === "success" && (
-            <div className="text-center">
-              <h2 className="text-2xl font-semibold mb-2 text-green-600">
-                Payment Successful 🎉
+            
+            <div className="print-area">
+              <h2 className="text-2xl font-semibold mb-2 text-green-600 text-center">
+                🎉 Payment Successful 🎉
               </h2>
-              <p className="text-gray-700 mb-4">
-                Thank you, your registration and (demo) payment are complete.
+
+              <p className="text-gray-700 mb-6 text-center">
+                Thank you, your registration and payment are complete.
               </p>
 
-              <div className="text-left bg-gray-50 border rounded p-4 text-sm">
-                <div className="mb-2">
-                  <strong>Registration ID:</strong> {registrationId}
-                </div>
-                <div className="mb-2">
-                  <strong>Name:</strong> {form.name}
-                </div>
-                <div className="mb-2">
-                  <strong>Email:</strong> {form.email}
-                </div>
-                <div className="mb-2">
-                  <strong>Age:</strong> {form.age}
-                </div>
-                <div className="mb-2">
-                  <strong>Qualification:</strong> {form.qualification}
-                </div>
+              <div className="text-sm mb-4">
+                <strong>Registration ID:</strong> {registrationId}
               </div>
 
+              {/* PERSONAL DETAILS */}
+              <h3 className="form-section-title">Personal Details</h3>
+              <div className="grid grid-cols-2 gap-4 text-sm">
+                <div><strong>Name:</strong> {form.name}</div>
+                <div><strong>Gender:</strong> {form.gender}</div>
+                <div><strong>Birth Place & Time:</strong> {form.birthPlaceTime}</div>
+                <div><strong>Age:</strong> {form.age}</div>
+                <div><strong>Complexion:</strong> {form.complexion}</div>
+                <div><strong>Gotra:</strong> {form.gotra}</div>
+                <div><strong>Height:</strong> {form.height}</div>
+                <div><strong>Caste:</strong> {form.caste}</div>
+                <div><strong>Religion:</strong> {form.religion}</div>
+              </div>
+
+              {/* PROFESSIONAL PROFILE */}
+              <h3 className="form-section-title">Professional Profile</h3>
+              <div><strong>Professional Profile Details:</strong> {form.professionalProfile}</div>
+
+              {/* PATERNAL FAMILY */}
+              <h3 className="form-section-title">Paternal Family</h3>
+              <div className="grid grid-cols-2 gap-4 text-sm">
+                <div><strong>Grandfather's Name:</strong> {form.grandfatherName}</div>
+                <div><strong>Father's Name:</strong> {form.fatherName}</div>
+                <div><strong>Mother's Name:</strong> {form.motherName}</div>
+              </div>
+
+              {/* MATERNAL FAMILY */}
+              <h3 className="form-section-title">Maternal Family</h3>
+              <div><strong>Maternal Family Details:</strong> {form.maternalFamily}</div>
+              
+
+              {/* CONTACT DETAILS */}
+              <h3 className="form-section-title">Contact Details</h3>
+              <div className="grid grid-cols-2 gap-4 text-sm">
+                <div><strong>Mobile:</strong> {form.mobile}</div>
+                <div><strong>Email:</strong> {form.email}</div>
+                <div><strong>Address:</strong> {form.address}</div>
+              </div>
+
+              {/* Professional Details */}
+              <h3 className="form-section-title">Professional Details</h3>
+              <div className="grid grid-cols-2 gap-4 text-sm">
+                <div><strong>Qualification:</strong> {form.qualification}</div>
+                <div><strong>Profession:</strong> {form.profession}</div>
+              </div>
+
+              {/* ACTIONS */}
               <div className="mt-6 flex justify-center gap-3">
                 <button
                   onClick={resetAll}
@@ -758,136 +974,313 @@ export default function App() {
                 >
                   Done
                 </button>
+
                 <button
                   onClick={() => window.print()}
                   className="px-5 py-2 bg-indigo-600 text-white rounded"
                 >
                   Print Receipt
                 </button>
+                <div className="print-footer-spacer"></div>
               </div>
             </div>
           )}
 
+
+
+
+
           {/* ADMIN VIEW: with side panel */}
+          {/* =========================
+            ADMIN VIEW
+          ========================= */}
           {step === "admin" && (
-            <div className="admin-layout">
-              {/* Sidebar */}
-              <aside className="admin-sidebar">
-                <h3 className="text-sm font-semibold mb-3">
-                  Dashboard Summary
-                </h3>
-                <div className="admin-stat-card">
-                  <div className="text-xs text-gray-500">
-                    Total Registrations
-                  </div>
-                  <div className="text-xl font-semibold">
-                    {totalRegistrations}
-                  </div>
-                </div>
-                <div className="admin-stat-card">
-                  <div className="text-xs text-gray-500">Paid</div>
-                  <div className="text-xl font-semibold text-green-600">
-                    {paidCount}
-                  </div>
-                </div>
-                <div className="admin-stat-card">
-                  <div className="text-xs text-gray-500">Pending</div>
-                  <div className="text-xl font-semibold text-yellow-700">
-                    {pendingCount}
-                  </div>
-                </div>
+            <div className="admin-page">
 
-                <button
-                  onClick={loadAdminData}
-                  className="admin-refresh-btn"
-                >
-                  {adminLoading ? (
-                    <span className="flex items-center gap-2">
-                      <Spinner size="sm" /> Refreshing...
-                    </span>
-                  ) : (
-                    "Refresh Data"
+              {/* ======================
+                ADMIN SUMMARY NAV BAR
+              ======================= */}
+              <div className="admin-summary-container">
+
+                <h3 className="dashboard-title">Dashboard Summary</h3>
+
+                <div className="admin-summary-bar">
+
+                  <div className="summary-card">
+                    <div className="summary-label">Total Registrations</div>
+                    <div className="summary-value">{totalRegistrations}</div>
+                  </div>
+
+                  <div className="summary-card">
+                    <div className="summary-label">Paid</div>
+                    <div className="summary-value">{paidCount}</div>
+                  </div>
+
+                  <div className="summary-card">
+                    <div className="summary-label">Pending</div>
+                    <div className="summary-value">{pendingCount}</div>
+                  </div>
+
+                  <button
+                    onClick={loadAdminData}
+                    className="summary-refresh-btn"
+                  >
+                    {adminLoading ? "Refreshing..." : "Refresh Data"}
+                  </button>
+
+                </div>
+              </div>
+
+              {/* ======================
+                ADMIN LIST VIEW
+              ======================= */}
+              {adminView === "list" && (
+                <div className="admin-table-wrapper">
+
+                  {adminLoading && (
+                    <div className="flex items-center gap-2 text-sm p-3">
+                      <Spinner /> Loading registrations...
+                    </div>
                   )}
-                </button>
-              </aside>
 
-              {/* Main admin content */}
-              <main className="admin-main">
-                <h2 className="text-xl font-medium mb-4">
-                  Admin — Registrations
-                </h2>
+                  {adminError && (
+                    <p className="text-red-600 p-3">{adminError}</p>
+                  )}
 
-                {adminLoading && (
-                  <div className="flex items-center gap-2 text-sm mb-3">
-                    <Spinner /> <span>Loading registrations...</span>
-                  </div>
-                )}
-
-                {adminError && (
-                  <p className="text-red-600 mb-3">{adminError}</p>
-                )}
-
-                {!adminLoading &&
-                  registrations.length === 0 &&
-                  !adminError && (
-                    <p className="text-gray-600">
+                  {!adminLoading && registrations.length === 0 && !adminError && (
+                    <p className="text-gray-600 p-3">
                       No registrations found yet.
                     </p>
                   )}
 
-                {!adminLoading && registrations.length > 0 && (
-                  <div className="overflow-x-auto">
-                    <table className="w-full text-sm border">
-                      <thead className="bg-gray-100">
-                        <tr>
-                          <th className="border px-2 py-1">ID</th>
-                          <th className="border px-2 py-1">Name</th>
-                          <th className="border px-2 py-1">Email</th>
-                          <th className="border px-2 py-1">Age</th>
-                          <th className="border px-2 py-1">
-                            Qualification
-                          </th>
-                          <th className="border px-2 py-1">Status</th>
-                          <th className="border px-2 py-1">Created At</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {registrations.map((r) => (
-                          <tr key={r.id}>
-                            <td className="border px-2 py-1">{r.id}</td>
-                            <td className="border px-2 py-1">
-                              {r.name}
-                            </td>
-                            <td className="border px-2 py-1">
-                              {r.email}
-                            </td>
-                            <td className="border px-2 py-1">
-                              {r.age}
-                            </td>
-                            <td className="border px-2 py-1">
-                              {r.qualification}
-                            </td>
-                            <td className="border px-2 py-1">
-                              <span
-                                className={
-                                  r.status === "paid"
-                                    ? "text-green-600 font-semibold"
-                                    : "text-yellow-700"
-                                }
-                              >
-                                {r.status}
-                              </span>
-                            </td>
-                            <td className="border px-2 py-1 text-xs">
-                              {r.created_at}
-                            </td>
+                  {!adminLoading && registrations.length > 0 && (
+                    <div className="admin-table-scroll">
+                      <table className="admin-table min-w-[3000px]">
+
+                        <thead>
+                          <tr>
+                            <th>View</th>
+                            <th>ID</th>
+                            <th>Name</th>
+                            <th>Gender</th>
+                            <th>Age</th>
+                            <th>Height</th>
+                            <th>Caste</th>
+                            <th>Religion</th>
+                            <th>Birth Place & Time</th>
+                            <th>Complexion</th>
+                            <th>Gotra</th>
+                            <th>Professional Profile</th>
+                            <th>Grandfather</th>
+                            <th>Father</th>
+                            <th>Mother</th>
+                            <th>Maternal Family</th>
+                            <th>Mobile</th>
+                            <th>Email</th>
+                            <th>Address</th>
+                            <th>Qualification</th>
+                            <th>Profession</th>
+                            <th>Status</th>
+                            <th>Created</th>
                           </tr>
-                        ))}
-                      </tbody>
-                    </table>
+                        </thead>
+
+                        <tbody>
+                          {registrations.map((r) => (
+                            <tr key={r._id}>
+
+                              {/* VIEW BUTTON */}
+                              <td>
+                                <button
+                                  className="px-3 py-1 text-xs bg-indigo-600 text-white rounded"
+                                  onClick={() => {
+                                    setSelectedRegistration(r);
+                                    setAdminView("profile");
+                                  }}
+                                >
+                                  View
+                                </button>
+                              </td>
+
+                              <td>{r._id}</td>
+                              <td>{r.name}</td>
+                              <td>{r.gender || "-"}</td>
+                              <td>{r.age || "-"}</td>
+                              <td>{r.height || "-"}</td>
+                              <td>{r.caste || "-"}</td>
+                              <td>{r.religion || "-"}</td>
+                              <td>{r.birthPlaceTime || "-"}</td>
+                              <td>{r.complexion || "-"}</td>
+                              <td>{r.gotra || "-"}</td>
+                              <td title={r.professionalProfile}>
+                                {r.professionalProfile || "-"}
+                              </td>
+
+                              <td>{r.grandfatherName || "-"}</td>
+                              <td>{r.fatherName || "-"}</td>
+                              <td>{r.motherName || "-"}</td>
+
+                              <td title={r.maternalFamily}>
+                                {r.maternalFamily || "-"}
+                              </td>
+
+                              <td>{r.mobile || "-"}</td>
+                              <td>{r.email}</td>
+
+                              <td title={r.address}>
+                                {r.address || "-"}
+                              </td>
+
+                              <td>{r.qualification || "-"}</td>
+                              <td>{r.profession || "-"}</td>
+
+                              <td>
+                                <span
+                                  className={
+                                    r.status === "paid"
+                                      ? "text-green-600 font-semibold"
+                                      : "text-yellow-700"
+                                  }
+                                >
+                                  {r.status}
+                                </span>
+                              </td>
+
+                              <td>
+                                {new Date(r.createdAt).toLocaleDateString()}
+                              </td>
+
+                            </tr>
+                          ))}
+                        </tbody>
+
+                      </table>
+                    </div>
+                  )}
+                </div>
+              )}
+
+              {/* ======================
+                ADMIN PROFILE VIEW
+              ====================== */}
+              {adminView === "profile" && selectedRegistration && (
+                <div className="admin-profile-view admin-profile-scroll">
+
+                  <button
+                    className="mb-4 px-4 py-2 bg-gray-200 rounded"
+                    onClick={() => {
+                      setAdminView("list");
+                      setSelectedRegistration(null);
+
+                      // restore scroll smoothly
+                      requestAnimationFrame(() => {
+                        const el = document.querySelector(".admin-table-scroll");
+                        if (el) {
+                          el.scrollTo({
+                            top: adminScrollY,
+                            behavior: "smooth",
+                          });
+                        }
+                      });
+                    }}
+                  >
+                    ← Back to Registrations
+                  </button>
+
+                  <div className="glass-card">
+
+                    <h2 className="text-xl font-semibold mb-6">
+                      Full Registration Profile
+                    </h2>
+
+                    {/* =====================
+                        PERSONAL DETAILS
+                    ===================== */}
+                    <h3 className="form-section-title">Personal Details</h3>
+                    <div className="grid grid-cols-2 gap-4 text-sm">
+                      <div><strong>Name:</strong> {selectedRegistration.name || "-"}</div>
+                      <div><strong>Gender:</strong> {selectedRegistration.gender || "-"}</div>
+                      <div><strong>Age:</strong> {selectedRegistration.age || "-"}</div>
+                      <div><strong>Height:</strong> {selectedRegistration.height || "-"}</div>
+                      <div><strong>Caste:</strong> {selectedRegistration.caste || "-"}</div>
+                      <div><strong>Religion:</strong> {selectedRegistration.religion || "-"}</div>
+                      <div><strong>Birth Place & Time:</strong> {selectedRegistration.birthPlaceTime || "-"}</div>
+                      <div><strong>Complexion:</strong> {selectedRegistration.complexion || "-"}</div>
+                      <div><strong>Gotra:</strong> {selectedRegistration.gotra || "-"}</div>
+                    </div>
+
+                    {/* =====================
+                        PROFESSIONAL PROFILE
+                        ===================== */}
+                    <h3 className="form-section-title">Professional Profile</h3>
+                    <div className="text-sm bg-gray-50 border rounded p-3">
+                      {selectedRegistration.professionalProfile || "-"}
+                    </div>
+
+                    {/* =====================
+                        PATERNAL FAMILY
+                        ===================== */}
+                    <h3 className="form-section-title">Paternal Family</h3>
+                    <div className="grid grid-cols-2 gap-4 text-sm">
+                      <div><strong>Grandfather:</strong> {selectedRegistration.grandfatherName || "-"}</div>
+                      <div><strong>Father:</strong> {selectedRegistration.fatherName || "-"}</div>
+                      <div><strong>Mother:</strong> {selectedRegistration.motherName || "-"}</div>
+                    </div>
+
+                    {/* =====================
+                        MATERNAL FAMILY
+                        ===================== */}
+                    <h3 className="form-section-title">Maternal Family</h3>
+                    <div className="text-sm bg-gray-50 border rounded p-3">
+                      {selectedRegistration.maternalFamily || "-"}
+                    </div>
+
+                    {/* =====================
+                        CONTACT DETAILS
+                        ===================== */}
+                    <h3 className="form-section-title">Contact Details</h3>
+                    <div className="grid grid-cols-2 gap-4 text-sm">
+                      <div><strong>Mobile:</strong> {selectedRegistration.mobile || "-"}</div>
+                      <div><strong>Email:</strong> {selectedRegistration.email || "-"}</div>
+                      <div className="col-span-2">
+                        <strong>Address:</strong> {selectedRegistration.address || "-"}
+                      </div>
+                    </div>
+                    {/* =====================
+                        Professional Details
+                        ===================== */}
+                    <h3 className="form-section-title">Professional Details</h3>
+                    <div className="grid grid-cols-2 gap-4 text-sm">
+                        <div><strong>Qualification:</strong> {selectedRegistration.qualification || "-"}</div>
+                        <div><strong>Profession:</strong> {selectedRegistration.profession || "-"}</div>
+                    </div>
+
+                    {/* =====================
+                        META INFO
+                        ===================== */}
+                    <h3 className="form-section-title">System Info</h3>
+                    <div className="grid grid-cols-2 gap-4 text-sm">
+                      <div>
+                        <strong>Status:</strong>{" "}
+                        <span
+                          className={
+                            selectedRegistration.status === "paid"
+                              ? "text-green-600 font-semibold"
+                              : "text-yellow-700"
+                          }
+                        >
+                          {selectedRegistration.status}
+                        </span>
+                      </div>
+                      <div>
+                        <strong>Created At:</strong>{" "}
+                        {new Date(selectedRegistration.createdAt).toLocaleString()}
+                      </div>
+                    </div>
+
                   </div>
-                )}
-              </main>
+                </div>
+              )}
             </div>
           )}
         </div>

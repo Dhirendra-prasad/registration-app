@@ -329,100 +329,27 @@ app.post("/api/auth/login", async (req, res) => {
 
 
 
-// app.post("/api/registrations", async (req, res) => {
-//   try {
-//     const { userId, name, email } = req.body;
-
-//     if (!userId || !name || !email) {
-//       return res.status(400).json({ error: "Required fields missing" });
-//     }
-
-//     let registration = await Registration.findOne({ userId });
-
-//     if (!registration) {
-//       registration = await Registration.create({
-//         userId,
-//         ...req.body, // 🔥 ACCEPT ALL FORM FIELDS
-//         status: "pending",
-//       });
-//     } else {
-//       registration.set({
-//         ...req.body,
-//         status: "pending",
-//       });
-//       await registration.save();
-//     }
-
-//     res.json({
-//       registration,
-//       amount_cents: 49900,
-//       currency: "INR",
-//     });
-//   } catch (err) {
-//     console.error("Registration error:", err);
-//     res.status(500).json({ error: "Server error" });
-//   }
-// });
-
-
-
 app.post("/api/registrations", async (req, res) => {
   try {
-    const {
-      userId,
-      name,
-      email,
-      age,
-      qualification,
-      birthPlaceTime,
-      profession,
-      complexion,
-      gotra,
-      height,
-      caste,
-      religion,
-      professionalProfile,
-      grandfatherName,
-      fatherName,
-      motherName,
-      maternalFamily,
-      mobile,
-      address,
-    } = req.body;
+    const { userId, name, email } = req.body;
 
     if (!userId || !name || !email) {
       return res.status(400).json({ error: "Required fields missing" });
     }
 
-    const payload = {
-      userId,
-      name,
-      email,
-      age,
-      qualification,
-      birthPlaceTime,
-      profession,
-      complexion,
-      gotra,
-      height,
-      caste,
-      religion,
-      professionalProfile,
-      grandfatherName,
-      fatherName,
-      motherName,
-      maternalFamily,
-      mobile,
-      address,
-      status: "pending",
-    };
-
     let registration = await Registration.findOne({ userId });
 
     if (!registration) {
-      registration = await Registration.create(payload);
+      registration = await Registration.create({
+        userId,
+        ...req.body, // 🔥 ACCEPT ALL FORM FIELDS
+        status: "pending",
+      });
     } else {
-      registration.set(payload);
+      registration.set({
+        ...req.body,
+        status: "pending",
+      });
       await registration.save();
     }
 
@@ -436,6 +363,79 @@ app.post("/api/registrations", async (req, res) => {
     res.status(500).json({ error: "Server error" });
   }
 });
+
+
+
+// app.post("/api/registrations", async (req, res) => {
+//   try {
+//     const {
+//       userId,
+//       name,
+//       email,
+//       age,
+//       qualification,
+//       birthPlaceTime,
+//       profession,
+//       complexion,
+//       gotra,
+//       height,
+//       caste,
+//       religion,
+//       professionalProfile,
+//       grandfatherName,
+//       fatherName,
+//       motherName,
+//       maternalFamily,
+//       mobile,
+//       address,
+//     } = req.body;
+
+//     if (!userId || !name || !email) {
+//       return res.status(400).json({ error: "Required fields missing" });
+//     }
+
+//     const payload = {
+//       userId,
+//       name,
+//       email,
+//       age,
+//       qualification,
+//       birthPlaceTime,
+//       profession,
+//       complexion,
+//       gotra,
+//       height,
+//       caste,
+//       religion,
+//       professionalProfile,
+//       grandfatherName,
+//       fatherName,
+//       motherName,
+//       maternalFamily,
+//       mobile,
+//       address,
+//       status: "pending",
+//     };
+
+//     let registration = await Registration.findOne({ userId });
+
+//     if (!registration) {
+//       registration = await Registration.create(payload);
+//     } else {
+//       registration.set(payload);
+//       await registration.save();
+//     }
+
+//     res.json({
+//       registration,
+//       amount_cents: 49900,
+//       currency: "INR",
+//     });
+//   } catch (err) {
+//     console.error("Registration error:", err);
+//     res.status(500).json({ error: "Server error" });
+//   }
+// });
 
 
 // GET REGISTRATION BY USER

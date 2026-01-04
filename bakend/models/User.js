@@ -6,6 +6,12 @@ const userSchema = new mongoose.Schema(
     email: { type: String, unique: true },
     password: String,
     role: { type: String, default: "user" },
+    emailVerified: {
+          type: Boolean,
+          default: false,
+        },
+        emailOtp: String,
+        otpExpiresAt: Date,
   },
   { timestamps: true }
 );

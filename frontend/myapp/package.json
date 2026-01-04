@@ -2,7 +2,7 @@
   "name": "myapp",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://dhirendra-prasad.github.io/registration-app/",
+  "homepage": "https://dhirendra-prasad.github.io/registration-app",
   "dependencies": {
     "@testing-library/dom": "^10.4.1",
     "@testing-library/jest-dom": "^6.9.1",
@@ -10,6 +10,7 @@
     "@testing-library/user-event": "^13.5.0",
     "dotenv": "^17.2.3",
     "mongoose": "^9.0.1",
+    "nodemailer": "^7.0.12",
     "react": "^19.2.1",
     "react-dom": "^19.2.1",
     "react-scripts": "5.0.1",

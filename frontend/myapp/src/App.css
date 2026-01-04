@@ -4,13 +4,31 @@
 
 /* --- MAIN BACKGROUND --- */
 .wedding-bg {
-  background: url("wedding-bg.jpg") no-repeat center center fixed;
+  background-image: url("wedding-bg.jpg");
+  background-repeat: no-repeat;
+  background-position: center center;
   background-size: cover;
+  background-attachment: fixed;
+
   position: relative;
 
   animation: bgFadeIn 0.5s ease-in-out forwards;
   transition: background 0.6s ease-in-out, filter 0.6s ease-in-out;
 }
+
+html, body {
+  width: 100%;
+  overflow-x: hidden;
+  -webkit-text-size-adjust: 100%;
+}
+
+
+@media (max-width: 480px) {
+  .wedding-bg {
+    background-size: 120% auto;
+  }
+}
+
 
 /* Background Hover Parallax */
 .wedding-bg:hover {
@@ -483,11 +501,47 @@ td {
   overflow-x: auto;
 }
 
-/* Links-like buttons */
+
+
 .text-indigo-600.underline {
-  background: none;
-  border: none;
+  /* Layout & Shape */
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.6rem 1.4rem;
+  border-radius: 0.5rem; /* Standard rounded corners like the Login button */
+  
+  /* Colors */
+  background-color: #4f46e5 !important; /* Vibrant blue */
+  
+  /* Typography */
+  font-size: 0.9rem;
+  /* font-weight: 600; */
+  text-decoration: none;
+  
+  /* Border & Effects */
+  border: 1px solid #2563eb !important; /* Slightly darker blue border */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+  transition: all 0.2s ease;
 }
+
+/* Hover State */
+.text-indigo-600.underline:hover {
+  background-color: #4338ca !important; /* Darker blue on hover */
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+  border: 1px solid rgb(113, 244, 240) !important;
+  border-color: #16a34a;
+}
+
+/* Active State */
+.text-indigo-600.underline:active {
+  transform: translateY(0px);
+  filter: brightness(0.9);
+}
+
+
 
 /* Container-specific styling to look modern */
 .min-h-screen.bg-gray-50.flex.items-center.justify-center.p-6 {
@@ -790,3 +844,620 @@ html, body {
     font-size: 1.1rem;
   }
 }
+
+
+/* =====================================
+   EXTENDED REGISTRATION FORM STYLING
+===================================== */
+
+/* Section Wrapper */
+.form-section {
+  margin-top: 2rem;
+  padding-top: 1.25rem;
+  border-top: 1px dashed rgba(255, 255, 255, 0.35);
+}
+
+/* Section Title */
+.form-section-title {
+  font-size: 1.05rem;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  margin-bottom: 1rem;
+  color: #111827;
+  position: relative;
+}
+
+/* Decorative underline */
+.form-section-title::after {
+  content: "";
+  display: block;
+  width: 48px;
+  height: 3px;
+  background: linear-gradient(90deg, #4f46e5, #22d3ee);
+  border-radius: 4px;
+  margin-top: 0.35rem;
+}
+
+/* Form Row Grid (2 columns desktop) */
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+/* Full-width fields */
+.form-grid-full {
+  grid-column: 1 / -1;
+}
+
+/* Textarea Styling */
+textarea {
+  width: 100%;
+  min-height: 110px;
+  resize: vertical;
+  font-size: 0.875rem;
+  padding: 0.6rem 0.75rem;
+  border-radius: 0.5rem;
+  border: 1px solid #d1d5db;
+  background: rgba(255, 255, 255, 0.95);
+}
+
+textarea:focus {
+  border-color: #4f46e5;
+  outline: none;
+  box-shadow: 0 0 0 1px rgba(79, 70, 229, 0.3);
+}
+
+/* Input label spacing fix */
+.form-section label {
+  margin-bottom: 0.25rem;
+}
+
+/* Subtle hover glow for inputs */
+input:hover,
+textarea:hover {
+  box-shadow: 0 0 0 1px rgba(79, 70, 229, 0.15);
+}
+
+/* =====================================
+   MOBILE ADJUSTMENTS FOR FORM SECTIONS
+===================================== */
+
+@media (max-width: 640px) {
+  .form-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .form-section {
+    margin-top: 1.5rem;
+    padding-top: 1rem;
+  }
+
+  .form-section-title {
+    font-size: 0.95rem;
+  }
+}
+
+
+/* ================================
+   PREMIUM FORM SECTIONS
+================================ */
+
+.form-section {
+  margin-top: 2rem;
+}
+
+.form-section-title {
+  font-size: 1.05rem;
+  font-weight: 600;
+  margin-bottom: 0.75rem;
+  padding-bottom: 0.4rem;
+  border-bottom: 1px solid rgba(255,255,255,0.35);
+  letter-spacing: 0.3px;
+}
+
+/* Inputs */
+.form-input {
+  width: 100%;
+  padding: 0.55rem 0.75rem;
+  border-radius: 0.5rem;
+  border: 1px solid #d1d5db;
+  background: rgba(255,255,255,0.85);
+  font-size: 0.875rem;
+  transition: 0.2s ease;
+}
+
+.form-input:focus {
+  border-color: #4f46e5;
+  box-shadow: 0 0 0 1px rgba(79,70,229,0.35);
+  outline: none;
+}
+
+/* Textarea */
+.form-textarea {
+  width: 100%;
+  padding: 0.75rem;
+  border-radius: 0.75rem;
+  border: 1px solid #d1d5db;
+  background: rgba(255,255,255,0.9);
+  font-size: 0.875rem;
+  resize: vertical;
+}
+
+.form-textarea:focus {
+  border-color: #4f46e5;
+  box-shadow: 0 0 0 1px rgba(79,70,229,0.35);
+  outline: none;
+}
+
+/* ===== FORM SECTIONS ===== */
+
+.form-section-title {
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin: 1.8rem 0 0.8rem;
+  color: #111827;
+  border-bottom: 1px solid rgba(255,255,255,0.4);
+  padding-bottom: 0.25rem;
+}
+
+/* Label + input separation */
+.form-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.form-label {
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: #111827;
+}
+
+.form-input,
+.form-textarea {
+  border-radius: 0.55rem;
+  padding: 0.6rem 0.75rem;
+  border: 1px solid #d1d5db;
+  font-size: 0.85rem;
+  background: rgba(255,255,255,0.95);
+}
+
+.form-textarea {
+  resize: vertical;
+}
+
+.form-input:focus,
+.form-textarea:focus {
+  outline: none;
+  border-color: #4f46e5;
+  box-shadow: 0 0 0 1px rgba(79,70,229,0.35);
+}
+
+
+/* ================================
+   PRINT ONLY REGISTRATION RECEIPT
+================================ */
+
+/* Hide everything by default */
+@media print {
+  body * {
+    visibility: hidden !important;
+  }
+
+  /* Show only the print area */
+  .print-area,
+  .print-area * {
+    visibility: visible !important;
+  }
+
+  /* Remove background effects */
+  .wedding-bg,
+  .wedding-bg::before,
+  .wedding-bg::after {
+    background: none !important;
+    filter: none !important;
+  }
+
+  /* Position receipt at top */
+  .print-area {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    /* padding: 0; */
+  }
+
+  /* Hide buttons */
+  button {
+    display: none !important;
+  }
+}
+
+/* ================================
+   PRINT CONTENT FLOW FIX
+================================ */
+@media print {
+
+  /* Allow content to flow naturally */
+  .print-area {
+    position: static !important;
+    height: auto !important;
+    overflow: visible !important;
+  }
+
+  /* Prevent sections from being cut */
+  .form-section-title,
+  .grid,
+  .form-field,
+  .text-sm,
+  .bg-gray-50,
+  .border {
+    page-break-inside: avoid !important;
+    break-inside: avoid !important;
+  }
+
+  /* Convert grid to single column for print */
+  .grid-cols-2 {
+    grid-template-columns: 1fr !important;
+  }
+
+  /* Remove shadows & glass for print clarity */
+  .glass-card,
+  .app-navbar {
+    box-shadow: none !important;
+    backdrop-filter: none !important;
+  }
+
+  /* Improve spacing for multi-page print */
+  .form-section-title {
+    margin-top: 24px !important;
+  }
+}
+
+
+/* ================================
+   REMOVE TOP BLANK SPACE IN PRINT
+================================ */
+@media print {
+
+  /* Remove browser default page margins */
+  @page {
+    margin: 0;
+  }
+
+  /* Remove body spacing */
+  body {
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  /* Ensure print area starts at absolute top */
+  .print-area {
+    margin: 0 !important;
+    padding: 12px !important; /* small inner padding for readability */
+    padding-bottom: 15px;
+  }
+}
+
+@media print {
+
+  /* REMOVE navbar completely */
+  .app-navbar {
+    display: none !important;
+  }
+
+  /* Also remove any layout wrapper margin */
+  .app-shell {
+    margin-top: 0 !important;
+  }
+
+  /* Ensure print starts at top */
+  .print-area {
+    margin-top: 0 !important;
+    padding-top: 0 !important;
+    padding-bottom: 15px;
+  }
+}
+
+@media print {
+
+  /* Add breathing space at bottom of receipt */
+  .print-area {
+    padding-bottom: 32px !important;
+  }
+
+  /* Ensure last section never touches page edge */
+  .print-area > :last-child {
+    margin-bottom: 24px !important;
+  }
+}
+
+@media print {
+
+  /* Reserve space at bottom of every printed page */
+  @page {
+    margin-top: 5mm;
+    margin-left: 0;
+    margin-right: 0;
+    margin-bottom: 5mm; /* 👈 THIS IS THE FIX */
+  }
+
+  /* Ensure content respects page box */
+  .print-area {
+    padding-bottom: 0 !important;
+    margin-bottom: 0 !important;
+  }
+}
+
+details summary {
+  cursor: pointer;
+}
+
+
+.admin-page {
+  display: flex;
+  flex-direction: column;
+  height: calc(100vh - 140px);
+}
+
+/* SUMMARY NAV BAR */
+.admin-summary-bar {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  padding: 12px 18px;
+  background: linear-gradient(90deg, #4f46e5, #6366f1);
+  color: #fff;
+  border-radius: 12px;
+  margin-bottom: 12px;
+}
+
+.summary-item {
+  min-width: 120px;
+}
+
+.summary-label {
+  font-size: 11px;
+  opacity: 0.8;
+}
+
+.summary-value {
+  font-size: 20px;
+  font-weight: 600;
+}
+
+.summary-refresh-btn {
+  margin-left: auto;
+  padding: 6px 14px;
+  border-radius: 9999px;
+  background: rgba(255,255,255,0.15);
+  color: #fff;
+}
+
+/* TABLE */
+.admin-table-wrapper {
+  flex: 1;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  background: #fff;
+  overflow: hidden;
+}
+
+.admin-table {
+  min-width: 1200px;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+
+.admin-table th {
+  position: sticky;
+  top: 0;
+  background: #f3f4f6;
+  z-index: 1;
+}
+
+.admin-table th,
+.admin-table td {
+  padding: 8px 10px;
+  border: 1px solid #e5e7eb;
+  white-space: nowrap;
+}
+
+
+/* =========================
+   DASHBOARD SUMMARY
+========================= */
+
+.admin-summary-container {
+  background: linear-gradient(90deg, #4f46e5, #6366f1);
+  border-radius: 16px;
+  margin-bottom: 14px;
+  box-shadow: 0 8px 22px rgba(79, 70, 229, 0.35);
+  color: #ffffff;
+}
+
+.dashboard-title {
+  font-size: 15px;
+  font-weight: 600;
+  margin-bottom: 5px;
+  margin-left: 20px;
+}
+
+/* Summary bar layout */
+.admin-summary-bar {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  flex-wrap: wrap;
+}
+
+/* Individual stat cards */
+.summary-card {
+  background: #92ccbf;
+  color: #111827;
+  border-radius: 14px;
+  padding: 10px 15px;
+  min-width: 160px;
+  min-height: fit-content;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+}
+
+.summary-label {
+  font-size: 14px;
+  color: #6b7280;
+  margin-bottom: 4px;
+}
+
+.summary-value {
+  font-size: 15px;
+  font-weight: 700;
+}
+
+/* Refresh button */
+.summary-refresh-btn {
+  margin-left: auto;
+  padding: 10px 22px;
+  border-radius: 9999px;
+  background: rgba(255,255,255,0.2);
+  color: #ffffff;
+  font-size: 14px;
+  font-weight: 500;
+  border: 1px solid rgba(255,255,255,0.35);
+}
+
+.summary-refresh-btn:hover {
+  background: rgba(255,255,255,0.3);
+}
+
+
+/* =========================
+   STICKY ADMIN SUMMARY
+========================= */
+
+.admin-summary-container {
+  position: sticky;
+  top: 12px; /* space from top */
+  z-index: 50;
+}
+
+
+/* =========================
+   RESPONSIVE ADMIN SUMMARY
+========================= */
+
+@media (max-width: 768px) {
+
+  .admin-summary-container {
+    padding: 14px;
+    border-radius: 14px;
+    top: 8px; /* slightly tighter on mobile */
+  }
+
+  .dashboard-title {
+    text-align: center;
+    font-size: 14px;
+    margin-bottom: 10px;
+  }
+
+  .admin-summary-bar {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+  }
+
+  .summary-card {
+    min-width: unset;
+    padding: 10px 12px;
+    text-align: center;
+  }
+
+  .summary-value {
+    font-size: 20px;
+  }
+
+  /* Refresh button spans full width */
+  .summary-refresh-btn {
+    grid-column: 1 / -1;
+    margin-left: 0;
+    width: 100%;
+    text-align: center;
+    padding: 10px;
+    font-size: 14px;
+  }
+}
+
+/* Extra-small devices */
+@media (max-width: 420px) {
+  .admin-summary-bar {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ================================
+   ADMIN PROFILE SCROLL FIX
+================================ */
+
+.admin-page {
+  height: calc(100vh - 160px); /* keeps inside main layout */
+  display: flex;
+  flex-direction: column;
+}
+
+.admin-profile-scroll {
+  flex: 1;
+  overflow-y: auto;
+  padding-right: 8px; /* scrollbar breathing space */
+}
+
+/* Prevent glass card from breaking layout */
+.admin-profile-scroll .glass-card {
+  max-width: 100%;
+}
+
+/* Mobile safe */
+@media (max-width: 768px) {
+  .admin-page {
+    height: auto;
+  }
+
+  .admin-profile-scroll {
+    max-height: 80vh;
+  }
+}
+
+.admin-table-scroll {
+  max-height: calc(100vh - 260px);
+  overflow: auto;
+}
+
+
+.admin-table thead th {
+  position: sticky;
+  top: 0;
+  background: #f9fafb;
+  z-index: 2;
+}
+
+
+/* ===============================
+   MOBILE BACKGROUND FIX (FINAL)
+================================ */
+
+@media (max-width: 768px) {
+  .wedding-bg {
+    background-attachment: scroll !important;
+    background-position: center top !important;
+    background-size: cover !important;
+    min-height: 100svh; /* mobile-safe viewport */
+  }
+
+  .wedding-bg::before,
+  .wedding-bg::after {
+    position: absolute !important;
+    inset: 0;
+  }
+}
+
+
