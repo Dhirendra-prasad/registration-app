@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import "./App.css"; // make sure this line is here
+import * as XLSX from "xlsx";
 
 // Change this if your backend runs on a different URL/port or use env on Vercel
 // const BACKEND_URL =
@@ -365,6 +366,58 @@ export default function App() {
     localStorage.removeItem("currentUser");
     setStep("auth");
   }
+
+
+  
+
+
+
+function exportAllRegistrationsToExcel() {
+  if (!registrations || registrations.length === 0) {
+    alert("No registrations to export");
+    return;
+  }
+
+  const data = registrations.map((r, index) => ({
+    "S.No": index + 1,
+    "Registration ID": r._id,
+    Name: r.name,
+    Gender: r.gender,
+    Age: r.age,
+    Height: r.height,
+    Religion: r.religion,
+    Caste: r.caste,
+    Gotra: r.gotra,
+    "Birth Place & Time": r.birthPlaceTime,
+    Complexion: r.complexion,
+
+    "Professional Profile": r.professionalProfile,
+
+    "Grandfather Name": r.grandfatherName,
+    "Father Name": r.fatherName,
+    "Mother Name": r.motherName,
+    "Maternal Family": r.maternalFamily,
+
+    Mobile: r.mobile,
+    Email: r.email,
+    Address: r.address,
+
+    Qualification: r.qualification,
+    Profession: r.profession,
+
+    Status: r.status,
+    "Created At": new Date(r.createdAt).toLocaleString(),
+  }));
+
+  const worksheet = XLSX.utils.json_to_sheet(data);
+  const workbook = XLSX.utils.book_new();
+
+  XLSX.utils.book_append_sheet(workbook, worksheet, "All Registrations");
+
+  XLSX.writeFile(workbook, "all_registrations.xlsx");
+}
+
+
 
   // ------- JSX -------
 
@@ -1021,12 +1074,29 @@ export default function App() {
                     <div className="summary-value">{pendingCount}</div>
                   </div>
 
-                  <button
+                  {/* <button
                     onClick={loadAdminData}
                     className="summary-refresh-btn"
                   >
                     {adminLoading ? "Refreshing..." : "Refresh Data"}
-                  </button>
+                  </button> */}
+
+                  <div className="flex gap-3">
+                    <button
+                      onClick={loadAdminData}
+                      className="summary-refresh-btn"
+                    >
+                      {adminLoading ? "Refreshing..." : "Refresh Data"}
+                    </button>
+
+                    <button
+                      onClick={exportAllRegistrationsToExcel}
+                      className="summary-refresh-btn"
+                      style={{ background: "rgba(34,197,94,0.9)" }}
+                    >
+                      Export All (Excel)
+                    </button>
+                  </div>
 
                 </div>
               </div>

@@ -17,8 +17,10 @@
 }
 
 html, body {
+  margin: 0;
+  padding: 0;
   width: 100%;
-  overflow-x: hidden;
+  /* overflow-x: hidden; */
   -webkit-text-size-adjust: 100%;
 }
 
@@ -45,7 +47,6 @@ html, body {
   -webkit-backdrop-filter: blur(6px);
   pointer-events: none;
   z-index: -1;
-
   animation: overlayFade 0.5s ease-in-out forwards;
 }
 
@@ -66,7 +67,7 @@ html, body {
   background-repeat: no-repeat;
   background-position: 10% 20%, 80% 70%, 50% 40%;
 
-  animation: bokehFloat 12s ease-in-out infinite alternate;
+  /* animation: bokehFloat 12s ease-in-out infinite alternate; */
 }
 
 /* ------ Animations ------ */
@@ -76,9 +77,10 @@ html, body {
 }
 
 @keyframes bgFadeIn {
-  0% { opacity: 0; transform: scale(1.03); filter: blur(4px); }
-  100% { opacity: 1; transform: scale(1); filter: blur(0px); }
+  0% { opacity: 0; filter: blur(4px); }
+  100% { opacity: 1; filter: blur(0px); }
 }
+
 
 @keyframes overlayFade {
   0% { opacity: 0; backdrop-filter: blur(0px); }
@@ -143,11 +145,6 @@ button:hover {
   box-sizing: border-box;
 }
 
-html,
-body {
-  margin: 0;
-  padding: 0;
-}
 
 body {
   font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
@@ -199,9 +196,7 @@ body {
   justify-content: space-between;
 }
 
-.w-full {
-  width: 100%;
-}
+
 
 .max-w-4xl {
   max-width: 56rem; /* ~896px */
@@ -739,10 +734,6 @@ input:focus {
    MOBILE RESPONSIVENESS FIX (CRITICAL)
 ===================================== */
 
-/* Prevent horizontal scroll */
-html, body {
-  overflow-x: hidden;
-}
 
 /* ---------- BACKGROUND FIX ---------- */
 /* Mobile browsers struggle with fixed backgrounds */
@@ -1200,6 +1191,7 @@ details summary {
   display: flex;
   flex-direction: column;
   height: calc(100vh - 140px);
+  overflow: hidden;
 }
 
 /* SUMMARY NAV BAR */
@@ -1276,6 +1268,10 @@ details summary {
   margin-bottom: 14px;
   box-shadow: 0 8px 22px rgba(79, 70, 229, 0.35);
   color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
 }
 
 .dashboard-title {
@@ -1289,8 +1285,9 @@ details summary {
 .admin-summary-bar {
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: 15px;
-  flex-wrap: wrap;
+  /* flex-wrap: wrap; */
 }
 
 /* Individual stat cards */
@@ -1318,12 +1315,12 @@ details summary {
 /* Refresh button */
 .summary-refresh-btn {
   margin-left: auto;
-  padding: 10px 22px;
-  border-radius: 9999px;
+  padding: 5px 11px;
+  border-radius: 12px;
   background: rgba(255,255,255,0.2);
   color: #ffffff;
   font-size: 14px;
-  font-weight: 500;
+  font-weight: 549;
   border: 1px solid rgba(255,255,255,0.35);
 }
 
