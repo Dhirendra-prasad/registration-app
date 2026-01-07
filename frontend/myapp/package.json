@@ -2,7 +2,7 @@
   "name": "myapp",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://dhirendra-prasad.github.io/registration-app",
+  
   "dependencies": {
     "@testing-library/dom": "^10.4.1",
     "@testing-library/jest-dom": "^6.9.1",
@@ -14,8 +14,7 @@
     "react": "^19.2.1",
     "react-dom": "^19.2.1",
     "react-scripts": "5.0.1",
-    "web-vitals": "^2.1.4",
-    "xlsx": "^0.18.5"
+    "web-vitals": "^2.1.4"
   },
   "devDependencies": {
     "gh-pages": "^6.1.1"

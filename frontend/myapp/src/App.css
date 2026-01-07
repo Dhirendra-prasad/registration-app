@@ -76,9 +76,14 @@ html, body {
   100% { transform: translateY(-40px) scale(1.05); opacity: 0.75; }
 }
 
-@keyframes bgFadeIn {
+/* @keyframes bgFadeIn {
   0% { opacity: 0; filter: blur(4px); }
   100% { opacity: 1; filter: blur(0px); }
+} */
+
+@keyframes bgFadeIn {
+  0% { opacity: 0; transform: scale(1.03); filter: blur(4px); }
+  100% { opacity: 1; transform: scale(1); filter: blur(0px); }
 }
 
 
@@ -1458,3 +1463,60 @@ details summary {
 }
 
 
+/* =========================
+   EXTRA SMALL MOBILE (≤ 430px)
+   Target: 430 x 608
+========================= */
+
+@media (max-width: 520px) {
+
+  /* Dashboard container tighter */
+  .admin-summary-container {
+    padding: 14px 14px 16px;
+    border-radius: 14px;
+  }
+
+  /* Title smaller + centered */
+  .dashboard-title {
+    font-size: 14px;
+    text-align: center;
+    margin-bottom: 10px;
+  }
+
+  /* Stack everything cleanly */
+  .admin-summary-bar {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+  }
+
+  /* Cards full width & compact */
+  .summary-card {
+    width: 100%;
+    padding: 12px 14px;
+    border-radius: 12px;
+    text-align: center;
+  }
+
+  .summary-label {
+    font-size: 12px;
+  }
+
+  .summary-value {
+    font-size: 18px;
+  }
+
+  /* Buttons stacked, full width */
+  .admin-summary-bar .flex {
+    flex-direction: column;
+    width: 100%;
+    gap: 10px;
+  }
+
+  .summary-refresh-btn {
+    width: 100%;
+    padding: 10px 14px;
+    font-size: 13px;
+    justify-content: center;
+  }
+}

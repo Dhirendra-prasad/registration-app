@@ -7,9 +7,9 @@ import * as XLSX from "xlsx";
 //   process.env.REACT_APP_API_URL ||
 //   "https://weeding-backend-979o.onrender.com";
 
-// const BACKEND_URL = "http://localhost:4242";
+const BACKEND_URL = "http://localhost:4242";
 
-const BACKEND_URL = "https://weeding-backend-979o.onrender.com";
+// const BACKEND_URL = "https://weeding-backend-979o.onrender.com";
 
 
 // Simple reusable spinner
